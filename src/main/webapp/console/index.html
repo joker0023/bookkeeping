@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+		<title>Console</title>
+		<link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../assets/css/common.css">
+		<link rel="stylesheet" href="../assets/css/console.css">
+	</head>
+	<body>
+		<div class="console-container">
+			<div class="left">
+				<div class="logo"></div>
+				<div class="nav">
+					<ul>
+						<li class="active">
+							<a href="javascript:void(0);">nav-a</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);">nav-a</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="right">
+				<div class="head">
+					<div class="user">
+						<img alt="avatar" src="../bb.png">
+						<span class="nick">joker</span>
+					</div>
+				</div>
+				<div class="main"></div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="../assets/jquery/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="../assets/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			({
+				init: function() {
+					this.$nav = $('.left .nav');
+					this.initFunction();
+				},
+				initFunction: function() {
+					var self = this;
+					self.$nav.on('click', 'a', function() {
+						self.$nav.find('li').removeClass('active');
+						$(this).parent().addClass('active');
+					});
+				}
+			}).init();
+		</script>
+	</body>
+</html>

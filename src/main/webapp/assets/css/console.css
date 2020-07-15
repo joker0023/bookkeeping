@@ -1,0 +1,78 @@
+.console-container {
+	display: flex;
+	flex-direction: row;
+	min-height: 100vh;
+	min-width: 700px;
+}
+.left {
+	width: 250px;
+	border-right: 1px solid #ebeef5;
+	min-height: 100vh;
+	/** #e3eeff **/
+}
+.left .logo {
+	height: 60px;
+	border-bottom: 1px solid #ebeef5;
+	width: 100%;
+}
+.left .nav ul {
+	padding: 0;
+	margin: 0;
+}
+.left .nav li {
+	height: 50px;
+	line-height: 50px;
+	padding-left: 15px;
+	display: block;
+}
+.left .nav .active {
+	background: #ebeef5;
+	border-right: 3px solid #00795b;
+}
+.left .nav a {
+	text-decoration: none;
+	color: #666;
+	display: block;
+}
+.left .nav li.active a,
+.left .nav li:hover a {
+	color: #00795b;
+}
+
+.right {
+	flex-grow: 1;
+	min-height: 100vh;
+	position: relative;
+}
+.right .head {
+	height: 60px;
+	border-bottom: 1px solid #ebeef5;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+.right .head .user {
+	float: right;
+	vertical-align: middle;
+	padding-right: 50px;
+	height: 60px;
+}
+.right .head .user img {
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	border: 1px solid #e3eeff;
+	display: inline-block;
+	vertical-align: middle;
+}
+.right .head .nick {
+	padding-left: 15px;
+	color: #999;
+	vertical-align: middle;
+	line-height: 60px;
+}
+
+.right .main {
+	min-height: 100vh;
+}
