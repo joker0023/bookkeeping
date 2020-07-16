@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageInfo;
 import com.jokerstation.bookkeeping.interceptor.ConsoleInterceptor;
 import com.jokerstation.bookkeeping.pojo.Bill;
+import com.jokerstation.bookkeeping.pojo.RelSeller;
 import com.jokerstation.bookkeeping.pojo.Shop;
 import com.jokerstation.bookkeeping.pojo.User;
 import com.jokerstation.bookkeeping.service.ConsoleService;
@@ -36,14 +37,19 @@ public class ConsoleController {
 	
 	@RequestMapping("/getCurrentUser")
 	public ResultModel getCurrentUser(HttpServletRequest request, HttpServletResponse response) {
-		User consoleUser = ConsoleInterceptor.getConsoleUser(request);
-		List<Shop> shopList = consoleService.listShops(consoleUser.getId());
+		Long userId = ConsoleInterceptor.getConsoleUserId(request);
+		User consoleUser = consoleService.getUser(userId);
+		List<RelSeller> relSellers = consoleService.listRelSellers(userId);
+		List<Shop> shopList = consoleService.listShops(relSellers);
 		Set<Long> shopIds = shopList.stream().map(Shop::getId).collect(Collectors.toSet());
 		consoleService.resetShopIds(shopIds);
+		
+		Map<Long, Byte> shopRoleMap = relSellers.stream().collect(Collectors.toMap(RelSeller::getShopId, RelSeller::getRole));
 		
 		Map<String, Object> data = new HashMap<>();
 		data.put("consoleUser", consoleUser);
 		data.put("shopList", shopList);
+		data.put("shopRoleMap", shopRoleMap);
 		return new ResultModel(data);
 	}
 	
@@ -60,8 +66,8 @@ public class ConsoleController {
 	public ResultModel recharge(@RequestBody Bill billvo) {
 		boolean result = consoleService.recharge(billvo);
 		if (!result) {
-			logger.warn("不存在对应信息: " + JsonUtils.toJson(billvo));
-			return new ResultModel("-1", "不存在对应信息");
+			logger.warn("非法请求: " + JsonUtils.toJson(billvo));
+			return new ResultModel("-1", "非法请求");
 		}
 		
 		return new ResultModel();
@@ -71,8 +77,8 @@ public class ConsoleController {
 	public ResultModel consume(@RequestBody Bill billvo) {
 		boolean result = consoleService.consume(billvo);
 		if (!result) {
-			logger.warn("不存在对应信息: " + JsonUtils.toJson(billvo));
-			return new ResultModel("-1", "不存在对应信息");
+			logger.warn("非法请求: " + JsonUtils.toJson(billvo));
+			return new ResultModel("-1", "非法请求");
 		}
 		
 		return new ResultModel();

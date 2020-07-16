@@ -1,17 +1,16 @@
 package com.jokerstation.bookkeeping.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jokerstation.bookkeeping.interceptor.ConsoleInterceptor;
-import com.jokerstation.bookkeeping.mapper.UserMapper;
 import com.jokerstation.bookkeeping.pojo.User;
+import com.jokerstation.bookkeeping.service.AppService;
+import com.jokerstation.bookkeeping.vo.TokenVo;
 import com.jokerstation.common.data.ResultModel;
 
 @RestController
@@ -19,14 +18,31 @@ import com.jokerstation.common.data.ResultModel;
 public class AuthController {
 	
 	@Autowired
-	private UserMapper userMapper;
+	private AppService appService;
 
-	@RequestMapping("/consoleLogin")
-	public ResultModel login(HttpServletRequest request, HttpServletResponse response) {
-		User record = new User();
-		record.setNick("joker");
-		List<User> userList = userMapper.select(record);
-		request.getSession().setAttribute(ConsoleInterceptor.CONSOLE_USER, userList.get(0));
+	@RequestMapping(path="/consoleLogin", method=RequestMethod.POST)
+	public ResultModel consoleLogin(String token, HttpServletRequest request) {
+//		String openId = appService.getOpenId(token);
+//		if (null == openId) {
+//			return new ResultModel("-1", "token illegal");
+//		}
+//		User user = appService.getUserByOpenId(openId);
+//		request.getSession().setAttribute(ConsoleInterceptor.CONSOLE_USER_ID, user.getId());
+		
+		request.getSession().setAttribute(ConsoleInterceptor.CONSOLE_USER_ID, 1L);
+		return new ResultModel();
+	}
+	
+	@RequestMapping(path="/appLogin", method=RequestMethod.POST)
+	public ResultModel appLogin(String code) throws Exception {
+		TokenVo tokenVo = appService.getAppUserByCode(code);
+		
+		return new ResultModel(tokenVo.getToken());
+	}
+	
+	@RequestMapping("/cleanToken")
+	public ResultModel cleanToken() {
+		appService.cleanToken();
 		return new ResultModel();
 	}
 }

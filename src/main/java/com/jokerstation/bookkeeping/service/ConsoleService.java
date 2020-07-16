@@ -17,11 +17,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jokerstation.bookkeeping.mapper.BillMapper;
-import com.jokerstation.bookkeeping.mapper.RelUserHasShopMapper;
+import com.jokerstation.bookkeeping.mapper.RelSellerMapper;
 import com.jokerstation.bookkeeping.mapper.ShopMapper;
 import com.jokerstation.bookkeeping.mapper.UserMapper;
 import com.jokerstation.bookkeeping.pojo.Bill;
-import com.jokerstation.bookkeeping.pojo.RelUserHasShop;
+import com.jokerstation.bookkeeping.pojo.RelSeller;
 import com.jokerstation.bookkeeping.pojo.Shop;
 import com.jokerstation.bookkeeping.pojo.User;
 
@@ -34,7 +34,7 @@ public class ConsoleService {
 	private BillService billService;
 	
 	@Autowired
-	private RelUserHasShopMapper relUserHasShopMapper;
+	private RelSellerMapper relSellerMapper;
 	
 	@Autowired
 	private UserMapper userMapper;
@@ -44,11 +44,12 @@ public class ConsoleService {
 	
 	private final static String SHOP_IDS = "shopIds";
 	
-	public List<Shop> listShops(Long userId) {
-		RelUserHasShop record = new RelUserHasShop();
-		record.setUserId(userId);
-		List<RelUserHasShop> rels = relUserHasShopMapper.select(record);
-		List<Long> shopIds = rels.stream().map(RelUserHasShop::getShopId).collect(Collectors.toList());
+	public User getUser(Long id) {
+		return userMapper.selectByPrimaryKey(id);
+	}
+	
+	public List<Shop> listShops(List<RelSeller> rels) {
+		List<Long> shopIds = rels.stream().map(RelSeller::getShopId).collect(Collectors.toList());
 		if (shopIds.size() == 0) {
 			return new ArrayList<Shop>();
 		}
@@ -56,6 +57,12 @@ public class ConsoleService {
 		Example example = new Example(Shop.class);
 		example.createCriteria().andIn("id", shopIds);
 		return shopMapper.selectByExample(example);
+	}
+	
+	public List<RelSeller> listRelSellers(Long userId) {
+		RelSeller record = new RelSeller();
+		record.setUserId(userId);
+		return relSellerMapper.select(record);
 	}
 	
 	public PageInfo<Bill> listBills(Long userId, Long shopId, int page, int size) {

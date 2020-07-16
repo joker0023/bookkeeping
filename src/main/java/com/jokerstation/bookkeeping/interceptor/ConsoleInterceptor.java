@@ -6,13 +6,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jokerstation.bookkeeping.pojo.User;
 import com.jokerstation.common.data.ResultModel;
 import com.jokerstation.common.util.JsonUtils;
 
 public class ConsoleInterceptor implements HandlerInterceptor {
 	
-	public final static String CONSOLE_USER = "consoleUser";
+	public final static String CONSOLE_USER_ID = "consoleUser";
 
 	@Override
 	public void afterCompletion(HttpServletRequest request,
@@ -29,8 +28,8 @@ public class ConsoleInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object paramObject) throws Exception {
-		User consoleUser = getConsoleUser(request);
-		if (null == consoleUser) {
+		Long userId = getConsoleUserId(request);
+		if (null == userId) {
 			setResponse(response, 403, "非法访问");
 			return false;
 		}
@@ -46,7 +45,7 @@ public class ConsoleInterceptor implements HandlerInterceptor {
 		response.getWriter().print(JsonUtils.toJson(model));
 	}
 	
-	public static User getConsoleUser(HttpServletRequest request) {
-		return (User)request.getSession().getAttribute(CONSOLE_USER);
+	public static Long getConsoleUserId(HttpServletRequest request) {
+		return (Long)request.getSession().getAttribute(CONSOLE_USER_ID);
 	}
 }

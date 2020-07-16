@@ -20,7 +20,9 @@ public class BillService {
 		PageHelper.startPage(page, size);
 		PageHelper.orderBy("created desc");
 		Bill record = new Bill();
-		record.setUserId(userId);
+		if (null != userId) {
+			record.setUserId(userId);
+		}
 		record.setShopId(shopId);
 		List<Bill> billList = billMapper.select(record);
 		return new PageInfo<>(billList);

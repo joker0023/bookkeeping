@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import lombok.Data;
 
 @Data
-public class RelShopHasUser implements Serializable {
+public class RelBuyer implements Serializable {
 
 	private static final long serialVersionUID = -6842159223841684760L;
 
