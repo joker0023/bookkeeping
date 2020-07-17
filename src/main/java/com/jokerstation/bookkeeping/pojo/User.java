@@ -17,25 +17,27 @@ public class User implements Serializable {
 	
 	public static final byte STATUS_OK = 1; //正常
 	
+	public static final byte TYPE_ADMIN = 1; //admin
+	
 	@Id
 	private Long id;
+	
+	private String openId;
 	
 	private String nick;
 	
 	private String avatar;
 	
-	private String openId;
-	
 	private String remark;
 	
 	private String phone;
 	
-	private Byte status;
-	
-	private Double balance;
+	private Byte userStatus;
 	
 	private Byte defaultRole;
 	
-	private Date created;
+	//1:admin
+	private Byte type;
 	
+	private Date created;
 }

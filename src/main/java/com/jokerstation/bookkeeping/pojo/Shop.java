@@ -21,7 +21,7 @@ public class Shop implements Serializable {
 
 	private String img;
 	
-	private String describe;
+	private String remark;
 	
 	private Date created;
 }

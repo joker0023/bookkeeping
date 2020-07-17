@@ -13,6 +13,7 @@ import com.github.pagehelper.PageInfo;
 import com.jokerstation.bookkeeping.pojo.Bill;
 import com.jokerstation.bookkeeping.pojo.User;
 import com.jokerstation.bookkeeping.service.AppService;
+import com.jokerstation.bookkeeping.service.WsServerEndpoint;
 import com.jokerstation.bookkeeping.vo.MineVo;
 import com.jokerstation.common.data.ResultModel;
 
@@ -22,6 +23,16 @@ public class AppController {
 	
 	@Autowired
 	private AppService appService;
+	
+	@Autowired
+	private WsServerEndpoint wsServerEndpoint;
+	
+	@RequestMapping(path="/loginScanOk", method=RequestMethod.POST)
+	public ResultModel loginScanOk(String sid) throws Exception {
+		String token = getToken();
+		wsServerEndpoint.sendMessage(sid, token);
+		return new ResultModel();
+	}
 
 	@RequestMapping("/getUser")
 	public ResultModel getMineVo() {

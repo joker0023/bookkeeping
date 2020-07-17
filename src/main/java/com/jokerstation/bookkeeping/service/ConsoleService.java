@@ -14,9 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jokerstation.bookkeeping.mapper.BillMapper;
+import com.jokerstation.bookkeeping.mapper.RelBuyerMapper;
 import com.jokerstation.bookkeeping.mapper.RelSellerMapper;
 import com.jokerstation.bookkeeping.mapper.ShopMapper;
 import com.jokerstation.bookkeeping.mapper.UserMapper;
@@ -35,6 +34,9 @@ public class ConsoleService {
 	
 	@Autowired
 	private RelSellerMapper relSellerMapper;
+	
+	@Autowired
+	private RelBuyerMapper relBuyerMapper;
 	
 	@Autowired
 	private UserMapper userMapper;
@@ -85,7 +87,7 @@ public class ConsoleService {
 		
 		Bill bill = new Bill();
 		bill.setCreated(new Date());
-		bill.setDescript(billvo.getDescript());
+		bill.setDetail(billvo.getDetail());
 		bill.setRate(billvo.getRate());
 		bill.setRemark(billvo.getRemark());
 		bill.setShopId(billvo.getShopId());
@@ -93,7 +95,7 @@ public class ConsoleService {
 		bill.setUserId(billvo.getUserId());
 		billService.insert(bill);
 		
-		userMapper.updateBalance(billvo.getUserId(), billvo.getRate());
+		relBuyerMapper.updateBalance(billvo.getUserId(), billvo.getShopId(), billvo.getRate());
 		return true;
 	}
 	
@@ -110,7 +112,7 @@ public class ConsoleService {
 		
 		Bill bill = new Bill();
 		bill.setCreated(new Date());
-		bill.setDescript(billvo.getDescript());
+		bill.setDetail(billvo.getDetail());
 		bill.setRate(billvo.getRate());
 		bill.setRemark(billvo.getRemark());
 		bill.setShopId(billvo.getShopId());
@@ -118,7 +120,7 @@ public class ConsoleService {
 		bill.setUserId(billvo.getUserId());
 		billService.insert(bill);
 		
-		userMapper.updateBalance(billvo.getUserId(), -billvo.getRate());
+		relBuyerMapper.updateBalance(billvo.getUserId(), billvo.getShopId(), -billvo.getRate());
 		return true;
 	}
 	

@@ -6,46 +6,40 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jokerstation.common.data.ResultModel;
-import com.jokerstation.common.util.JsonUtils;
+import com.jokerstation.common.util.HttpUtil;
 
 public class ConsoleInterceptor implements HandlerInterceptor {
-	
+
 	public final static String CONSOLE_USER_ID = "consoleUser";
 
 	@Override
-	public void afterCompletion(HttpServletRequest request,
-			HttpServletResponse response, Object paramObject,
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object paramObject,
 			Exception paramException) throws Exception {
 	}
 
 	@Override
-	public void postHandle(HttpServletRequest request,
-			HttpServletResponse response, Object paramObject,
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object paramObject,
 			ModelAndView paramModelAndView) throws Exception {
 	}
 
 	@Override
-	public boolean preHandle(HttpServletRequest request,
-			HttpServletResponse response, Object paramObject) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object paramObject)
+			throws Exception {
 		Long userId = getConsoleUserId(request);
-		if (null == userId) {
-			setResponse(response, 403, "非法访问");
-			return false;
+		if (null != userId) {
+			return true;
 		}
 		
-		return true;
+		if (HttpUtil.isAjaxRequest(request)) {
+			HttpUtil.setResponse(response, 403, "登陆已过期");
+		} else {
+			response.sendRedirect(request.getContextPath() + "/login.html");
+		}
+		return false;
 	}
-	
-	private void setResponse(HttpServletResponse response, int status, String msg) throws Exception {
-		response.setStatus(status);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		ResultModel model = new ResultModel(status + "", msg);
-		response.getWriter().print(JsonUtils.toJson(model));
-	}
-	
+
+
 	public static Long getConsoleUserId(HttpServletRequest request) {
-		return (Long)request.getSession().getAttribute(CONSOLE_USER_ID);
+		return (Long) request.getSession().getAttribute(CONSOLE_USER_ID);
 	}
 }

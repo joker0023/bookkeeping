@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-	<title>Console-Login</title>
+	<title>Admin-Login</title>
 	<link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
 		body {
@@ -78,13 +78,13 @@
 	            self.socket.onmessage = function(msg) {
 	                console.log('onmessage', msg.data);
 	                
-	                var url = 'auth/consoleLogin';
+	                var url = 'auth/adminLogin';
 					var token = msg.data;
 					$.post(url, {
 						token: token
 					}, function(resp) {
 						if (resp.code == 0) {
-							location.href = 'console/index.html';
+							location.href = 'admin/init-shop.html';
 						}
 					});
 	            };

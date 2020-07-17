@@ -28,7 +28,7 @@ public class Bill implements Serializable {
 	
 	private String remark;
 	
-	private String descript;
+	private String detail;
 	
 	private Date created;
 }

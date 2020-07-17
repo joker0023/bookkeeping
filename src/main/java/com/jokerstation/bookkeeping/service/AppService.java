@@ -55,7 +55,7 @@ public class AppService {
 	
 	public static Map<String, TokenVo> tokenMap = new HashMap<String, TokenVo>();
 	
-	public String getOpenId(String token) {
+	public static String getOpenId(String token) {
 		if (null == token) {
 			return null;
 		}
@@ -68,11 +68,11 @@ public class AppService {
 		return tokenVo.getOpenId();
 	}
 	
-	private void setSessionTokenVo(TokenVo tokenVo) {
+	private static void setSessionTokenVo(TokenVo tokenVo) {
 		tokenMap.put(tokenVo.getToken(), tokenVo);
 	}
 	
-	public void cleanToken() {
+	public static void cleanToken() {
 		List<String> expiredKey = new ArrayList<String>();
 		for (String key : tokenMap.keySet()) {
 			TokenVo tokenVo = tokenMap.get(key);
@@ -119,11 +119,10 @@ public class AppService {
 		}
 		
 		user = new User();
-		user.setBalance(0.0);
 		user.setCreated(new Date());
 		user.setDefaultRole(User.DEFAULT_ROLE_BUYER);
 		user.setOpenId(openId);
-		user.setStatus(User.STATUS_OK);
+		user.setUserStatus(User.STATUS_OK);
 		userMapper.insert(user);
 		
 		return getUserByOpenId(openId);

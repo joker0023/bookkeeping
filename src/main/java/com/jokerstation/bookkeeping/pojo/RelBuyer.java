@@ -18,5 +18,7 @@ public class RelBuyer implements Serializable {
 	@Id
 	private Long userId;
 	
+	private Double balance;
+	
 	private Date created;
 }
